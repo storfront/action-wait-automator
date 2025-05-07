@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Box, Typography, Container } from '@mui/material';
 import TriggerCard from './TriggerCard';
 import WaitCard from './WaitCard';
 import ActionCard from './ActionCard';
@@ -40,17 +41,25 @@ const AutomationSequence = () => {
   };
 
   return (
-    <div className="automation-container">
-      <h1 className="text-2xl font-bold mb-2">Email Automation Sequence</h1>
-      <p className="text-gray-600 mb-4">
-        Build your email automation flow by adding wait times and actions
-      </p>
-      
-      <div className="sequence-list">
-        <div className="sequence-connector"></div>
+    <Box className="automation-container">
+      <Box sx={{ position: 'relative', px: 2 }}>
+        {/* Timeline connector */}
+        <Box 
+          className="sequence-connector" 
+          sx={{
+            position: 'absolute',
+            left: '50%',
+            top: 0,
+            bottom: 0,
+            width: 2,
+            backgroundColor: '#ccc',
+            transform: 'translateX(-50%)',
+            zIndex: 0
+          }}
+        />
         
         {sequenceItems.map((item, index) => (
-          <div className="sequence-item" key={item.id}>
+          <Box className="sequence-item" key={item.id} sx={{ position: 'relative', zIndex: 1 }}>
             {item.type === 'trigger' && (
               <TriggerCard 
                 onAdd={handleAddAfterTrigger} 
@@ -68,10 +77,10 @@ const AutomationSequence = () => {
                 isLast={index === sequenceItems.length - 1}
               />
             )}
-          </div>
+          </Box>
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

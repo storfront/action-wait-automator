@@ -1,19 +1,24 @@
 
 import React from 'react';
+import { Container, Typography, Box } from '@mui/material';
 import AutomationSequence from '../components/automation/AutomationSequence';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto">
-        <header className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-gray-900">Email Automation Builder</h1>
-          <p className="text-gray-600 mt-2">Create automated email sequences with custom wait times</p>
-        </header>
+    <Box sx={{ minHeight: '100vh', bgcolor: '#f7f9fc', py: 4 }}>
+      <Container>
+        <Box sx={{ textAlign: 'center', mb: 5 }}>
+          <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
+            Email Automation Builder
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary">
+            Create automated email sequences with custom wait times
+          </Typography>
+        </Box>
         
         <AutomationSequence />
-      </div>
-    </div>
+      </Container>
+    </Box>
   );
 };
 

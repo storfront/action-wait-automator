@@ -1,66 +1,132 @@
 
 import React from 'react';
+import { 
+  Box, 
+  Typography, 
+  TextField, 
+  Button 
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import SendIcon from '@mui/icons-material/Send';
 
 const ActionCard = ({ id, onAdd, onDelete, isLast }) => {
   return (
-    <div className="sequence-card action-card">
-      <div className="card-header">
-        <h3 className="text-sm font-medium">Action</h3>
-      </div>
-      <div className="card-body">
-        <div className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-              <span className="text-green-600 text-sm">📤</span>
-            </div>
-            <span className="text-sm font-medium">Send Email</span>
-          </div>
+    <Box 
+      className="sequence-card action-card"
+      sx={{
+        position: 'relative',
+        backgroundColor: '#fff',
+        borderRadius: 2,
+        padding: 2,
+        boxShadow: '0px 2px 8px rgba(0,0,0,0.1)',
+        mb: 4
+      }}
+    >
+      <Box className="card-header">
+        <Typography variant="subtitle2" fontWeight="medium" sx={{ mb: 1 }}>Action</Typography>
+      </Box>
+      <Box className="card-body">
+        <Box sx={{ mb: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
+            <Box 
+              sx={{ 
+                width: 32, 
+                height: 32, 
+                borderRadius: '50%', 
+                bgcolor: '#f0fff0', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center' 
+              }}
+            >
+              <SendIcon fontSize="small" sx={{ color: 'green' }} />
+            </Box>
+            <Typography variant="body2" fontWeight="medium">Send Email</Typography>
+          </Box>
           
-          <div className="pl-10">
-            <div className="space-y-3">
-              <input 
-                type="text" 
+          <Box sx={{ pl: 5 }}>
+            <Box sx={{ mb: 2 }}>
+              <TextField
                 id={`subject-${id}`}
-                placeholder="Email Subject" 
-                className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                fullWidth
+                placeholder="Email Subject"
+                variant="outlined"
+                size="small"
+                sx={{ mb: 2 }}
               />
-              <textarea 
+              <TextField
                 id={`content-${id}`}
-                rows={2} 
-                placeholder="Email Content" 
-                className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                fullWidth
+                placeholder="Email Content"
+                variant="outlined"
+                multiline
+                rows={2}
               />
-            </div>
-          </div>
+            </Box>
+          </Box>
 
           {isLast && (
-            <div className="flex justify-between mt-4 pt-2 border-t border-gray-100">
-              <button 
+            <Box 
+              sx={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                mt: 3, 
+                pt: 1, 
+                borderTop: '1px solid rgba(0,0,0,0.1)' 
+              }}
+            >
+              <Button 
                 onClick={onDelete} 
-                className="flex items-center px-3 py-1 bg-red-50 text-red-600 text-sm rounded-md hover:bg-red-100 transition-colors"
+                startIcon={<DeleteOutlineIcon />}
+                color="error"
+                variant="outlined"
+                size="small"
+                sx={{ fontSize: '0.8rem' }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 6h18" />
-                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                </svg>
                 Delete
-              </button>
-              <button 
+              </Button>
+              <Button 
                 onClick={onAdd} 
-                className="flex items-center px-3 py-1 bg-blue-50 text-blue-600 text-sm rounded-md hover:bg-blue-100 transition-colors"
+                startIcon={<AddIcon />}
+                color="primary"
+                variant="outlined"
+                size="small"
+                sx={{ fontSize: '0.8rem' }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 5v14M5 12h14" />
-                </svg>
                 Add
-              </button>
-            </div>
+              </Button>
+            </Box>
           )}
-        </div>
-      </div>
-      {!isLast && <div className="connector-dot"></div>}
-    </div>
+        </Box>
+      </Box>
+      {!isLast && (
+        <Box 
+          className="connector-dot" 
+          sx={{ 
+            position: 'absolute',
+            bottom: -20,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 10,
+            height: 10,
+            borderRadius: '50%',
+            bgcolor: '#ccc',
+            zIndex: 1,
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              top: '100%',
+              left: '50%',
+              height: 20,
+              width: 2,
+              transform: 'translateX(-50%)',
+              bgcolor: '#ccc'
+            }
+          }}
+        />
+      )}
+    </Box>
   );
 };
 
