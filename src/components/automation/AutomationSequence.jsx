@@ -116,19 +116,22 @@ const AutomationSequence = () => {
     ]);
   };
   
-  // Add items to a true branch
+  // Add action to a true branch
   const handleAddToTrueBranch = (parentGroupId, conditionId) => {
-    const trueGroup = groups.find(g => g.parentGroupId === parentGroupId && g.conditionId === conditionId && g.branchId === 'true');
+    const trueGroup = groups.find(g => 
+      g.parentGroupId === parentGroupId && 
+      g.conditionId === conditionId && 
+      g.branchId === 'true'
+    );
     
     if (trueGroup) {
-      const waitId = generateId('wait');
       const actionId = generateId('action');
       
       setGroups(groups.map(group => {
         if (group.id === trueGroup.id) {
           return {
             ...group,
-            items: [...group.items, { id: waitId, type: 'wait' }, { id: actionId, type: 'action' }]
+            items: [...group.items, { id: actionId, type: 'action' }]
           };
         }
         return group;
@@ -136,19 +139,22 @@ const AutomationSequence = () => {
     }
   };
   
-  // Add items to a false branch
+  // Add action to a false branch
   const handleAddToFalseBranch = (parentGroupId, conditionId) => {
-    const falseGroup = groups.find(g => g.parentGroupId === parentGroupId && g.conditionId === conditionId && g.branchId === 'false');
+    const falseGroup = groups.find(g => 
+      g.parentGroupId === parentGroupId && 
+      g.conditionId === conditionId && 
+      g.branchId === 'false'
+    );
     
     if (falseGroup) {
-      const waitId = generateId('wait');
       const actionId = generateId('action');
       
       setGroups(groups.map(group => {
         if (group.id === falseGroup.id) {
           return {
             ...group,
-            items: [...group.items, { id: waitId, type: 'wait' }, { id: actionId, type: 'action' }]
+            items: [...group.items, { id: actionId, type: 'action' }]
           };
         }
         return group;
