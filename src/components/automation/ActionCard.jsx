@@ -1,16 +1,50 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Box, 
   Typography, 
   TextField, 
-  Button 
+  Button, 
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SendIcon from '@mui/icons-material/Send';
+import EditIcon from '@mui/icons-material/Edit';
+import CloseIcon from '@mui/icons-material/Close';
 
-const ActionCard = ({ id, onAdd, onDelete, isLast }) => {
+// We'll import JoditEditor for the rich text editing
+// Note: This will require installing jodit-react
+const ActionCard = ({ id, onAdd, onDelete, isLast, groupId, branchId }) => {
+  const [open, setOpen] = useState(false);
+  const [emailData, setEmailData] = useState({
+    subject: '',
+    from: '',
+    to: '',
+    cc: '',
+    body: '<p>Write your email content here...</p>'
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEmailData({
+      ...emailData,
+      [name]: value
+    });
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Box 
       className="sequence-card action-card"
@@ -48,21 +82,56 @@ const ActionCard = ({ id, onAdd, onDelete, isLast }) => {
           <Box sx={{ pl: 5 }}>
             <Box sx={{ mb: 2 }}>
               <TextField
-                id={`subject-${id}`}
+                label="Subject"
+                name="subject"
+                value={emailData.subject}
+                onChange={handleChange}
                 fullWidth
-                placeholder="Email Subject"
                 variant="outlined"
                 size="small"
                 sx={{ mb: 2 }}
               />
+              
+              <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                <TextField
+                  label="From"
+                  name="from"
+                  value={emailData.from}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                />
+                <TextField
+                  label="To"
+                  name="to"
+                  value={emailData.to}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                />
+              </Box>
+              
               <TextField
-                id={`content-${id}`}
+                label="CC"
+                name="cc"
+                value={emailData.cc}
+                onChange={handleChange}
                 fullWidth
-                placeholder="Email Content"
                 variant="outlined"
-                multiline
-                rows={2}
+                size="small"
+                sx={{ mb: 2 }}
               />
+              
+              <Button
+                onClick={handleOpen}
+                startIcon={<EditIcon />}
+                variant="outlined"
+                size="small"
+              >
+                Edit Email Content
+              </Button>
             </Box>
           </Box>
 
@@ -100,6 +169,49 @@ const ActionCard = ({ id, onAdd, onDelete, isLast }) => {
           )}
         </Box>
       </Box>
+      
+      {/* Email content editor dialog */}
+      <Dialog 
+        open={open} 
+        onClose={handleClose}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>
+          Edit Email Content
+          <IconButton
+            onClick={handleClose}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ my: 2 }}>
+            <Typography variant="body2" sx={{ mb: 1 }}>
+              Email Content (Rich Text Editor will be integrated here)
+            </Typography>
+            <TextField
+              multiline
+              rows={10}
+              fullWidth
+              placeholder="Email body content will be edited here with Jodit editor"
+              name="body"
+              value={emailData.body}
+              onChange={handleChange}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose} variant="contained">Save</Button>
+        </DialogActions>
+      </Dialog>
+      
       {!isLast && (
         <Box 
           className="connector-dot" 

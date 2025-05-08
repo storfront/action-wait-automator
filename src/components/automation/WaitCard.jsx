@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
-const WaitCard = ({ id }) => {
+const WaitCard = ({ id, groupId, branchId }) => {
   const [waitTime, setWaitTime] = useState(2);
   const [timeUnit, setTimeUnit] = useState('days');
 

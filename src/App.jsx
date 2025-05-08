@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Create a custom theme
 const theme = createTheme({

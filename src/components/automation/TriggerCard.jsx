@@ -1,10 +1,35 @@
 
-import React from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import React, { useState } from 'react';
+import { 
+  Box, 
+  Typography, 
+  Button, 
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+  Chip,
+  Autocomplete
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EmailIcon from '@mui/icons-material/Email';
 
-const TriggerCard = ({ onAdd, isLast }) => {
+const TriggerCard = ({ id, onAdd, isLast }) => {
+  const [triggerType, setTriggerType] = useState('ndaAction');
+  const [selectedListings, setSelectedListings] = useState([]);
+  
+  const listings = [
+    { id: 1, title: "Property A" },
+    { id: 2, title: "Property B" },
+    { id: 3, title: "Property C" },
+    { id: 4, title: "Property D" }
+  ];
+  
+  const handleTriggerTypeChange = (event) => {
+    setTriggerType(event.target.value);
+  };
+
   return (
     <Box 
       className="sequence-card trigger-card"
@@ -22,7 +47,7 @@ const TriggerCard = ({ onAdd, isLast }) => {
       </Box>
       <Box className="card-body">
         <Box sx={{ mb: 2 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, gap: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
             <Box 
               sx={{ 
                 width: 32, 
@@ -36,16 +61,57 @@ const TriggerCard = ({ onAdd, isLast }) => {
             >
               <EmailIcon fontSize="small" color="primary" />
             </Box>
-            <Typography variant="body2" fontWeight="medium">Email Received</Typography>
+            <TextField
+              label="Name"
+              fullWidth
+              variant="outlined"
+              size="small"
+              placeholder="When NDA status is..."
+            />
           </Box>
           
-          <Typography 
-            variant="body2" 
-            color="text.secondary" 
-            sx={{ pl: 5 }}
-          >
-            When a new email is received that matches the criteria
-          </Typography>
+          <Box sx={{ pl: 5, mb: 2 }}>
+            <FormControl fullWidth sx={{ mb: 2 }} size="small">
+              <InputLabel>Event</InputLabel>
+              <Select
+                value={triggerType}
+                label="Event"
+                onChange={handleTriggerTypeChange}
+              >
+                <MenuItem value="ndaAction">NDA Action</MenuItem>
+                <MenuItem value="emailReceived">Email Received</MenuItem>
+                <MenuItem value="listingUpdated">Listing Updated</MenuItem>
+              </Select>
+            </FormControl>
+            
+            <Autocomplete
+              multiple
+              id="listings-tags"
+              options={listings}
+              getOptionLabel={(option) => option.title}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select Listings"
+                  placeholder="Listings"
+                  size="small"
+                />
+              )}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip 
+                    label={option.title} 
+                    {...getTagProps({ index })} 
+                    size="small"
+                  />
+                ))
+              }
+              value={selectedListings}
+              onChange={(event, newValue) => {
+                setSelectedListings(newValue);
+              }}
+            />
+          </Box>
 
           {isLast && (
             <Box 

@@ -12,7 +12,7 @@ const Index = () => {
             Email Automation Builder
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
-            Create automated email sequences with custom wait times
+            Create automated email sequences with conditions and custom wait times
           </Typography>
         </Box>
         
