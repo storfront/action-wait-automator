@@ -8,13 +8,20 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  IconButton,
+  Menu
 } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import AddIcon from '@mui/icons-material/Add';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const WaitCard = ({ id, groupId, branchId }) => {
+const WaitCard = ({ id, groupId, branchId, onDelete, onInsert }) => {
   const [waitTime, setWaitTime] = useState(2);
   const [timeUnit, setTimeUnit] = useState('days');
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
   const handleSliderChange = (event, newValue) => {
     setWaitTime(newValue);
@@ -30,6 +37,24 @@ const WaitCard = ({ id, groupId, branchId }) => {
     setTimeUnit(event.target.value);
   };
 
+  const handleOpenMenu = (event) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setMenuAnchorEl(null);
+  };
+
+  const handleDelete = () => {
+    handleCloseMenu();
+    onDelete(id, groupId);
+  };
+
+  const handleInsert = () => {
+    handleCloseMenu();
+    onInsert(id, groupId);
+  };
+
   return (
     <Box 
       className="sequence-card wait-card"
@@ -42,8 +67,26 @@ const WaitCard = ({ id, groupId, branchId }) => {
         mb: 4
       }}
     >
-      <Box className="card-header">
-        <Typography variant="subtitle2" fontWeight="medium" sx={{ mb: 1 }}>Wait</Typography>
+      <Box className="card-header" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+        <Typography variant="subtitle2" fontWeight="medium">Wait</Typography>
+        <IconButton size="small" onClick={handleOpenMenu}>
+          <MoreVertIcon fontSize="small" />
+        </IconButton>
+        <Menu
+          anchorEl={menuAnchorEl}
+          open={Boolean(menuAnchorEl)}
+          onClose={handleCloseMenu}
+        >
+          <MenuItem onClick={handleCloseMenu}>
+            <EditIcon fontSize="small" sx={{ mr: 1 }} /> Edit
+          </MenuItem>
+          <MenuItem onClick={handleInsert}>
+            <AddIcon fontSize="small" sx={{ mr: 1 }} /> Insert Card
+          </MenuItem>
+          <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+            <DeleteOutlineIcon fontSize="small" sx={{ mr: 1 }} /> Delete
+          </MenuItem>
+        </Menu>
       </Box>
       <Box className="card-body">
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>

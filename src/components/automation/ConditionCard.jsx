@@ -8,13 +8,21 @@ import {
   Select, 
   MenuItem,
   TextField,
-  Button
+  Button,
+  IconButton,
+  Menu
 } from '@mui/material';
 import CallSplitIcon from '@mui/icons-material/CallSplit';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import AddIcon from '@mui/icons-material/Add';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-const ConditionCard = ({ id, onAddToTrueBranch, onAddToFalseBranch }) => {
+const ConditionCard = ({ id, onAddToTrueBranch, onAddToFalseBranch, onDelete, onInsert }) => {
   const [conditionType, setConditionType] = useState('ndaStatus');
   const [conditionValue, setConditionValue] = useState('submitted');
+  const [conditionName, setConditionName] = useState('');
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   
   const handleConditionTypeChange = (event) => {
     setConditionType(event.target.value);
@@ -22,6 +30,28 @@ const ConditionCard = ({ id, onAddToTrueBranch, onAddToFalseBranch }) => {
   
   const handleConditionValueChange = (event) => {
     setConditionValue(event.target.value);
+  };
+
+  const handleConditionNameChange = (event) => {
+    setConditionName(event.target.value);
+  };
+
+  const handleOpenMenu = (event) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setMenuAnchorEl(null);
+  };
+
+  const handleDelete = () => {
+    handleCloseMenu();
+    onDelete(id);
+  };
+
+  const handleInsert = () => {
+    handleCloseMenu();
+    onInsert(id);
   };
 
   return (
@@ -36,8 +66,26 @@ const ConditionCard = ({ id, onAddToTrueBranch, onAddToFalseBranch }) => {
         mb: 4
       }}
     >
-      <Box className="card-header">
-        <Typography variant="subtitle2" fontWeight="medium" sx={{ mb: 1 }}>Condition</Typography>
+      <Box className="card-header" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+        <Typography variant="subtitle2" fontWeight="medium">Condition</Typography>
+        <IconButton size="small" onClick={handleOpenMenu}>
+          <MoreVertIcon fontSize="small" />
+        </IconButton>
+        <Menu
+          anchorEl={menuAnchorEl}
+          open={Boolean(menuAnchorEl)}
+          onClose={handleCloseMenu}
+        >
+          <MenuItem onClick={handleCloseMenu}>
+            <EditIcon fontSize="small" sx={{ mr: 1 }} /> Edit
+          </MenuItem>
+          <MenuItem onClick={handleInsert}>
+            <AddIcon fontSize="small" sx={{ mr: 1 }} /> Insert Card
+          </MenuItem>
+          <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+            <DeleteOutlineIcon fontSize="small" sx={{ mr: 1 }} /> Delete
+          </MenuItem>
+        </Menu>
       </Box>
       <Box className="card-body">
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 2 }}>
@@ -60,6 +108,8 @@ const ConditionCard = ({ id, onAddToTrueBranch, onAddToFalseBranch }) => {
             size="small"
             fullWidth
             placeholder="When NDA status is..."
+            value={conditionName}
+            onChange={handleConditionNameChange}
           />
         </Box>
         
@@ -105,6 +155,7 @@ const ConditionCard = ({ id, onAddToTrueBranch, onAddToFalseBranch }) => {
               size="small" 
               color="success"
               fullWidth
+              startIcon={<AddIcon />}
             >
               Add Steps
             </Button>
@@ -118,12 +169,38 @@ const ConditionCard = ({ id, onAddToTrueBranch, onAddToFalseBranch }) => {
               size="small" 
               color="error"
               fullWidth
+              startIcon={<AddIcon />}
             >
               Add Steps
             </Button>
           </Box>
         </Box>
       </Box>
+      
+      <Box 
+        className="connector-dot" 
+        sx={{ 
+          position: 'absolute',
+          bottom: -20,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 10,
+          height: 10,
+          borderRadius: '50%',
+          bgcolor: '#ccc',
+          zIndex: 1,
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: '100%',
+            left: '50%',
+            height: 20,
+            width: 2,
+            transform: 'translateX(-50%)',
+            bgcolor: '#ccc'
+          }
+        }}
+      />
     </Box>
   );
 };

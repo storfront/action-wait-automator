@@ -10,14 +10,19 @@ import {
   MenuItem,
   TextField,
   Chip,
-  Autocomplete
+  Autocomplete,
+  IconButton,
+  Menu
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EmailIcon from '@mui/icons-material/Email';
+import EditIcon from '@mui/icons-material/Edit';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const TriggerCard = ({ id, onAdd, isLast }) => {
   const [triggerType, setTriggerType] = useState('ndaAction');
   const [selectedListings, setSelectedListings] = useState([]);
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   
   const listings = [
     { id: 1, title: "Property A" },
@@ -28,6 +33,14 @@ const TriggerCard = ({ id, onAdd, isLast }) => {
   
   const handleTriggerTypeChange = (event) => {
     setTriggerType(event.target.value);
+  };
+
+  const handleOpenMenu = (event) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setMenuAnchorEl(null);
   };
 
   return (
@@ -42,8 +55,20 @@ const TriggerCard = ({ id, onAdd, isLast }) => {
         mb: 4
       }}
     >
-      <Box className="card-header">
-        <Typography variant="subtitle2" fontWeight="medium" sx={{ mb: 1 }}>Trigger</Typography>
+      <Box className="card-header" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+        <Typography variant="subtitle2" fontWeight="medium">Trigger</Typography>
+        <IconButton size="small" onClick={handleOpenMenu}>
+          <MoreVertIcon fontSize="small" />
+        </IconButton>
+        <Menu
+          anchorEl={menuAnchorEl}
+          open={Boolean(menuAnchorEl)}
+          onClose={handleCloseMenu}
+        >
+          <MenuItem onClick={handleCloseMenu}>
+            <EditIcon fontSize="small" sx={{ mr: 1 }} /> Edit
+          </MenuItem>
+        </Menu>
       </Box>
       <Box className="card-body">
         <Box sx={{ mb: 2 }}>
@@ -113,56 +138,52 @@ const TriggerCard = ({ id, onAdd, isLast }) => {
             />
           </Box>
 
-          {isLast && (
-            <Box 
-              sx={{ 
-                display: 'flex', 
-                justifyContent: 'flex-end', 
-                mt: 3, 
-                pt: 1, 
-                borderTop: '1px solid rgba(0,0,0,0.1)' 
-              }}
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              justifyContent: 'flex-end', 
+              mt: 3, 
+              pt: 1, 
+              borderTop: '1px solid rgba(0,0,0,0.1)' 
+            }}
+          >
+            <Button 
+              onClick={onAdd} 
+              startIcon={<AddIcon />}
+              color="primary"
+              variant="outlined"
+              size="small"
+              sx={{ fontSize: '0.8rem' }}
             >
-              <Button 
-                onClick={onAdd} 
-                startIcon={<AddIcon />}
-                color="primary"
-                variant="outlined"
-                size="small"
-                sx={{ fontSize: '0.8rem' }}
-              >
-                Add
-              </Button>
-            </Box>
-          )}
+              Add Card
+            </Button>
+          </Box>
         </Box>
       </Box>
-      {!isLast && (
-        <Box 
-          className="connector-dot" 
-          sx={{ 
+      <Box 
+        className="connector-dot" 
+        sx={{ 
+          position: 'absolute',
+          bottom: -20,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 10,
+          height: 10,
+          borderRadius: '50%',
+          bgcolor: '#ccc',
+          zIndex: 1,
+          '&::after': {
+            content: '""',
             position: 'absolute',
-            bottom: -20,
+            top: '100%',
             left: '50%',
+            height: 20,
+            width: 2,
             transform: 'translateX(-50%)',
-            width: 10,
-            height: 10,
-            borderRadius: '50%',
-            bgcolor: '#ccc',
-            zIndex: 1,
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              top: '100%',
-              left: '50%',
-              height: 20,
-              width: 2,
-              transform: 'translateX(-50%)',
-              bgcolor: '#ccc'
-            }
-          }}
-        />
-      )}
+            bgcolor: '#ccc'
+          }
+        }}
+      />
     </Box>
   );
 };
